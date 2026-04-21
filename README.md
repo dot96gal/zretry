@@ -1,5 +1,9 @@
 # zretry
 
+[![API Docs](https://img.shields.io/badge/API%20Docs-GitHub%20Pages-blue)](https://dot96gal.github.io/zretry/)
+[![test](https://github.com/dot96gal/zretry/actions/workflows/test.yml/badge.svg)](https://github.com/dot96gal/zretry/actions/workflows/test.yml)
+[![release](https://github.com/dot96gal/zretry/actions/workflows/release.yml/badge.svg)](https://github.com/dot96gal/zretry/actions/workflows/release.yml)
+
 Zig向けのシンプルなリトライ処理ライブラリです。指数関数バックオフ + Full Jitter によるリトライを1行で追加できます。
 
 > **注意:** このリポジトリは個人的な興味・学習を目的としたホビーライブラリです。設計上の判断はすべて作者が個人で行っており、事前の告知なく破壊的変更が加わることがあります。安定した API を前提としたい場合は、任意のコミットやタグ時点でフォークし、独自に管理されることをおすすめします
