@@ -151,40 +151,40 @@ fn testFunc() error{ Retry, Other }!void {
     }
 }
 
-const noSleepConfig = Config{
+const NO_SLEEP_CONFIG = Config{
     .maxAttempts = 3,
     .strategy = .{ .exponentialJitter = .{ .baseDelayMs = 0 } },
 };
 
 test "succeeds on first attempt" {
     TestState.reset(0, false);
-    try retry(std.testing.io, noSleepConfig, testFunc, .{});
+    try retry(std.testing.io, NO_SLEEP_CONFIG, testFunc, .{});
     try std.testing.expectEqual(@as(u32, 1), TestState.callCount);
 }
 
 test "succeeds after N retries" {
     TestState.reset(2, false);
-    try retry(std.testing.io, noSleepConfig, testFunc, .{});
+    try retry(std.testing.io, NO_SLEEP_CONFIG, testFunc, .{});
     try std.testing.expectEqual(@as(u32, 3), TestState.callCount);
 }
 
 test "non-Retry error propagates immediately on first attempt" {
     TestState.reset(0, true);
-    const result = retry(std.testing.io, noSleepConfig, testFunc, .{});
+    const result = retry(std.testing.io, NO_SLEEP_CONFIG, testFunc, .{});
     try std.testing.expectError(error.Other, result);
     try std.testing.expectEqual(@as(u32, 1), TestState.callCount);
 }
 
 test "non-Retry error propagates after N retries" {
     TestState.reset(2, true);
-    const result = retry(std.testing.io, noSleepConfig, testFunc, .{});
+    const result = retry(std.testing.io, NO_SLEEP_CONFIG, testFunc, .{});
     try std.testing.expectError(error.Other, result);
     try std.testing.expectEqual(@as(u32, 3), TestState.callCount);
 }
 
 test "returns RetriesExhausted when all attempts fail" {
     TestState.reset(99, false);
-    const result = retry(std.testing.io, noSleepConfig, testFunc, .{});
+    const result = retry(std.testing.io, NO_SLEEP_CONFIG, testFunc, .{});
     try std.testing.expectError(error.RetriesExhausted, result);
     try std.testing.expectEqual(@as(u32, 3), TestState.callCount);
 }
