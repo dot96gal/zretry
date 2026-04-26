@@ -1,7 +1,7 @@
 # zretry
 
 [![API Docs](https://img.shields.io/badge/API%20Docs-GitHub%20Pages-blue)](https://dot96gal.github.io/zretry/)
-[![test](https://github.com/dot96gal/zretry/actions/workflows/test.yml/badge.svg)](https://github.com/dot96gal/zretry/actions/workflows/test.yml)
+[![ci](https://github.com/dot96gal/zretry/actions/workflows/ci.yml/badge.svg)](https://github.com/dot96gal/zretry/actions/workflows/ci.yml)
 [![release](https://github.com/dot96gal/zretry/actions/workflows/release.yml/badge.svg)](https://github.com/dot96gal/zretry/actions/workflows/release.yml)
 
 Zig向けのシンプルなリトライ処理ライブラリです。指数関数バックオフ + Full Jitter によるリトライを1行で追加できます。
@@ -159,11 +159,14 @@ mise install
 
 | コマンド | 説明 |
 |---|---|
-| `mise run build` | コンパイルチェック |
-| `mise run test` | テスト実行 |
-| `mise run fmt` | コードフォーマット |
+| `mise run fmt` | フォーマット |
 | `mise run fmt-check` | フォーマットチェック |
+| `mise run lint` | リント |
+| `mise run build` | ビルド |
+| `mise run test` | テスト |
 | `mise run example:basic` | サンプルコードの実行 |
+| `mise run build-docs` | API ドキュメントのビルド |
+| `mise run serve-docs` | API ドキュメントのサーブ |
 | `mise run release <version>` | リリース |
 
 ### ファイル構成
