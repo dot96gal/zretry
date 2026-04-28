@@ -1,12 +1,12 @@
 # zretry
 
 [![API Docs](https://img.shields.io/badge/API%20Docs-GitHub%20Pages-blue)](https://dot96gal.github.io/zretry/)
-[![ci](https://github.com/dot96gal/zretry/actions/workflows/ci.yml/badge.svg)](https://github.com/dot96gal/zretry/actions/workflows/ci.yml)
-[![release](https://github.com/dot96gal/zretry/actions/workflows/release.yml/badge.svg)](https://github.com/dot96gal/zretry/actions/workflows/release.yml)
+[![CI](https://github.com/dot96gal/zretry/actions/workflows/ci.yml/badge.svg)](https://github.com/dot96gal/zretry/actions/workflows/ci.yml)
+[![Release](https://github.com/dot96gal/zretry/actions/workflows/release.yml/badge.svg)](https://github.com/dot96gal/zretry/actions/workflows/release.yml)
 
-Zig向けのシンプルなリトライ処理ライブラリです。指数関数バックオフ + Full Jitter によるリトライを1行で追加できます。
+Zig のシンプルなリトライ処理ライブラリ。
 
-> **注意:** このリポジトリは個人的な興味・学習を目的としたホビーライブラリです。設計上の判断はすべて作者が個人で行っており、事前の告知なく破壊的変更が加わることがあります。安定した API を前提としたい場合は、任意のコミットやタグ時点でフォークし、独自に管理されることをおすすめします
+> **注意:** このリポジトリは個人的な興味・学習を目的としたホビーライブラリです。設計上の判断はすべて作者が個人で行っており、事前の告知なく破壊的変更が加わることがあります。安定した API を前提としたい場合は、任意のコミットやタグ時点でフォークし、独自に管理されることをおすすめします。
 
 ## 要件
 -  Zig 0.16.0 以上
@@ -48,9 +48,9 @@ const zretry_mod = zretry_dep.module("zretry");
 exe.root_module.addImport("zretry", zretry_mod);
 ```
 
-### 基本的な使い方
+### 使い方
 
-リトライしたい操作を関数として定義し、一時的なエラーのときに `error.Retry` を返します。それ以外のエラーはそのまま返します。**何をリトライするかはユーザが関数内で決める**設計であり、ライブラリはバックオフ制御のみを担います。
+リトライしたい操作を関数として定義し、一時的なエラーのときに `error.Retry` を返す。それ以外のエラーはそのまま返す。**何をリトライするかはユーザが関数内で決める**設計であり、ライブラリはバックオフ制御のみを担う。
 
 ```zig
 const zretry = @import("zretry");
@@ -79,7 +79,7 @@ pub fn main(env: std.process.Init) !void {
 }
 ```
 
-### カスタム設定
+#### カスタム設定
 
 ```zig
 const config = zretry.Config{
@@ -109,7 +109,7 @@ pub fn retry(
 ) anyerror!T
 ```
 
-バックオフ付きでリトライを実行します。`func` が `error.Retry` を返したときのみリトライし、それ以外のエラーは即座に呼び出し元に伝播します。`config.maxAttempts` 回すべて `error.Retry` だった場合は `error.RetriesExhausted` を返します。`func` はエラーユニオンを返す関数でなければなりません。
+バックオフ付きでリトライを実行する。`func` が `error.Retry` を返したときのみリトライし、それ以外のエラーは即座に呼び出し元に伝播する。`config.maxAttempts` 回すべて `error.Retry` だった場合は `error.RetriesExhausted` を返す。`func` はエラーユニオンを返す関数でなければならない。
 
 #### `Config`
 
@@ -143,9 +143,13 @@ pub fn retry(
 
 ## 開発者向け
 
-### 前提ツール
+### 必要なツール
 
-- [mise](https://mise.jdx.dev/) — Zig のバージョン管理と開発タスクの実行に使用
+| ツール | 説明 |
+|-------|------|
+| [mise](https://mise.jdx.dev/) | ツールバージョン管理（Zig・zls を自動インストール） |
+| `zig-lint` | Zig 簡易リントスクリプト（`~/.local/bin/` にインストール済み） |
+| `zig-release` | バージョン更新・タグ付けスクリプト（`~/.local/bin/` にインストール済み） |
 
 ### セットアップ
 
@@ -155,7 +159,7 @@ cd zretry
 mise install
 ```
 
-### 開発タスク
+### タスク一覧
 
 | コマンド | 説明 |
 |---|---|
@@ -172,12 +176,14 @@ mise install
 ### ファイル構成
 
 ```
+build.zig        # ビルドスクリプト
+build.zig.zon    # パッケージマニフェスト
 src/
-  root.zig      パブリック API の再エクスポート
-  retry.zig     retry() 関数・Config・バックオフ計算の実装
-  backoff.zig   Strategy union・ExponentialJitterConfig の型定義
+  root.zig       # パブリック API の再エクスポート
+  retry.zig      # retry() 関数・Config・バックオフ計算の実装
+  backoff.zig    # Strategy union・ExponentialJitterConfig の型定義
 example/
-  basic.zig     基本的な使い方のサンプル
+  basic.zig      # 基本的な使い方のサンプル
 ```
 
 ### 設計方針
@@ -186,17 +192,11 @@ example/
 - **`anyerror` の採用**: `func` の返すエラー集合から `error.Retry` を型レベルで除去する手段が Zig 0.16.0 では存在しないため、戻り値型は `anyerror` を使用している。
 - **外部依存なし**: Zig 標準ライブラリ（`std`）のみを使用する。
 
-### テスト方針
+### テスト
 
 - `backoff` 関連テストは `src/retry.zig` 内にあり、`nextDelayMs` をプライベート関数として直接テストする。
 - スリープを伴うテストは `baseDelayMs = 0` で遅延をゼロにして回避する。
 - `src/root.zig` の `test { _ = @import(...) }` ブロックによりすべてのテストが `zig build test` で実行される。
-
-### リリース手順
-
-```sh
-mise run release <version>  # 例: mise run release 1.0.0
-```
 
 ---
 
